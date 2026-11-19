@@ -118,18 +118,48 @@ When two or more units change code at the same time, run each with
    discoveries become ledger notes, not silent expansions.
 5. **Review after significant work.** Dispatch `orchestrate:reviewer` for
    an independent verdict before calling work done. Give it the base ref
-   and the gate command. Critical findings and high-confidence suggestions
-   must be fixed or rebutted.
-6. **Commit at validated split points**, rather than letting reviewed,
+   and the gate command.
+6. **Address the review — when the work under review is yours.** If this
+   session produced the changes (implementation units), the review is a
+   gate, not a report: see "Acting on review findings" below. If the task
+   itself is a review (someone's PR, an audit, a second opinion), deliver
+   the findings and stop — fixing is the user's call.
+7. **Commit at validated split points**, rather than letting reviewed,
    gate-passing work pile up uncommitted. Don't commit past an open
    Critical or a failing gate.
-7. **Synthesize from the ledger**, not your (possibly summarized) context —
+8. **Synthesize from the ledger**, not your (possibly summarized) context —
    reread it when merging a long run.
+
+## Acting on review findings
+
+Applies only to changes this session made. Triage each finding:
+
+| Finding | Action |
+|---------|--------|
+| Critical (any confidence) | Fix, or rebut with evidence |
+| Suggestion, confidence ≥ 80 | Fix, or rebut with a reason |
+| Suggestion < 80, Nits | Your judgment — fix if cheap and clearly right, otherwise note and move on |
+
+- **Fix through the implementer.** Dispatch `orchestrate:implementer` on
+  the same branch with the findings quoted verbatim (file, line, evidence)
+  so it doesn't have to rediscover them. Use `opus` for Critical fixes.
+- **Rebut honestly.** A rebuttal is a concrete reason the finding is wrong
+  or out of scope (e.g. "intended: callers validate input, see
+  `api/handler.go:40`"), not a preference. Record it as one line in the
+  ledger.
+- **Re-verify.** After fixes, rerun the gate. If any Critical was fixed,
+  re-dispatch the reviewer on just the fix commits to confirm the fix and
+  catch regressions it introduced.
+- **Cap the loop at two rounds.** If Criticals are still open after the
+  second, stop and bring them to the user with the evidence — repeated
+  failed fixes usually mean a misunderstood requirement, not a typo.
+- Ledger: per finding, one line — `fixed <SHA>`, `rebutted: <reason>`, or
+  `deferred`.
 
 ## Report (only when the user says the session is over)
 
 - Where the ledger(s) live
 - The synthesized result
-- Review outcome if step 5 ran (tally; Criticals addressed vs. open)
+- Review outcome if step 5 ran (tally; fixed / rebutted / open)
 - Validated checkpoints committed (SHAs)
 - Anything left open or flagged for follow-up
