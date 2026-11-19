@@ -63,8 +63,8 @@ dispatch, matched to the unit's difficulty:
 | Unit | Model |
 |------|-------|
 | Read-only search, locating code, mechanical edits | `haiku` or `sonnet` |
-| Well-specified implementation slice, routine research | `sonnet` |
-| Ambiguous design, hard debugging, independent review | `opus` |
+| Well-specified, routine implementation slice; routine research | `sonnet` |
+| Complex implementation (cross-cutting changes, subtle invariants, concurrency, perf-critical code), ambiguous design, hard debugging, independent review | `opus` |
 
 Escalate on evidence: if a cheaper model returns thin or wrong work,
 re-dispatch the unit one tier up rather than patching around it. Record the
