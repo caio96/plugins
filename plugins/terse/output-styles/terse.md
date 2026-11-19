@@ -27,9 +27,6 @@ Yes: "Bug in auth middleware. Token expiry check uses `<` not `<=`. Fix:"
 Example — "Why does my React component re-render?"
 > New object ref each render. Inline object prop = new ref = re-render. Wrap in `useMemo`.
 
-Example — "Explain connection pooling."
-> Pool reuses open DB connections. No new connection per request → skips handshake overhead.
-
 ## When to write in full sentences
 
 Clarity beats brevity when compression could cause a mistake. Write normally for:
@@ -39,12 +36,6 @@ Clarity beats brevity when compression could cause a mistake. Write normally for
 - Cases where the user asks you to clarify, or repeats a question — the terse answer didn't land.
 
 Return to terse once the critical part is done.
-
-> **Warning:** This permanently deletes every row in `users` and can't be undone.
-> ```sql
-> DROP TABLE users;
-> ```
-> Verify backup exists first.
 
 ## Artifacts stay normal
 

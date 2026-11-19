@@ -25,12 +25,11 @@ output style).
 
 ## Recursion cap
 
-A dispatched agent may spawn its own subagents when a unit is genuinely too
-big to do inline — that's fine. But cap it at one level: every prompt you
-send must tell the agent that any subagent *it* spawns is the recursion
-stop and may not spawn further agents. Without that line, depth is
-unbounded and nested agents are invisible to you (no supervision, no
-cleanup, unpredictable cost and resource fan-out).
+A dispatched agent may spawn its own subagents for a genuinely big unit,
+but only one level deep: tell it that any subagent *it* spawns may not
+spawn further (`orchestrate:implementer` already knows this). Without that
+line, depth is unbounded and nested agents are invisible to you — no
+supervision, no cleanup, unpredictable cost.
 
 ## Keep a durable ledger
 
@@ -41,17 +40,15 @@ fails, append `.notes/` to `.git/info/exclude`.
 
 - **Session task list** — `pending → in_progress → completed`, one per
   unit; the harness re-surfaces it after compaction.
-- **Ledger file**, one per orchestrate session — `.notes/ledger-<topic>.md`,
-  a distinct name each run (never a shared `run.md`) so sessions don't
-  collide or overwrite each other's history. Use the shape in
-  `references/ledger-template.md`: one short block per unit (agent/model,
-  status, one-line result). Keep it brief — you reread the ledger to
+- **Ledger file** — `.notes/ledger-<topic>.md`, a distinct name per session
+  so sessions never overwrite each other. Follow
+  `references/ledger-template.md`. Keep it brief: you reread it to
   synthesize, so every redundant line costs context later. Update a unit's
-  block in place rather than appending a new entry per status change, and
-  record conclusions, not transcripts or diffs.
-- **Frictions** — a single durable `.notes/frictions.md`, shared across
-  every session (append one line per friction; don't fork a new file). A recurring pain only
-  becomes fixable once it's visible in one place.
+  block in place instead of appending per status change, and record
+  conclusions, not transcripts or diffs.
+- **Frictions** — one shared `.notes/frictions.md` across all sessions,
+  one line per friction. A recurring pain only becomes fixable once it's
+  visible in one place.
 
 ## Pick the model per unit
 
@@ -67,8 +64,7 @@ dispatch, matched to the unit's difficulty:
 | Complex implementation (cross-cutting changes, subtle invariants, concurrency, perf-critical code), ambiguous design, hard debugging, independent review | `opus` |
 
 Escalate on evidence: if a cheaper model returns thin or wrong work,
-re-dispatch the unit one tier up rather than patching around it. Record the
-model in the ledger so cost/quality patterns become visible over time.
+re-dispatch the unit one tier up rather than patching around it.
 
 Known limits — check them, don't fight them:
 - **Forks ignore `model`.** A `fork` always runs on your own model; use a
@@ -85,10 +81,9 @@ When two or more units change code at the same time, run each with
 - **Split by files.** Give parallel units disjoint file sets; overlapping
   edits turn into merge conflicts you resolve by hand. If units must touch
   the same file, run them sequentially instead.
-- **Dispatch `orchestrate:implementer`** — it commits its finished work on
-  the worktree branch and reports the branch and SHA. (If you use another
-  agent type, tell it to do the same: an uncommitted worktree is
-  auto-cleaned and the work is lost.)
+- **Dispatch `orchestrate:implementer`** — it commits on the worktree
+  branch and reports branch + SHA. Any other agent type must be told to
+  commit too: an uncommitted worktree is auto-cleaned and the work lost.
 - **Review before merging.** Point the reviewer at the unit's branch
   (`review <branch> against <base>`).
 - **Merge into your branch** with `git merge` or `git cherry-pick`, one
@@ -101,11 +96,9 @@ When two or more units change code at the same time, run each with
    needing another's output is a later stage, not a sibling. If the work
    is small and sequential, just do it — orchestration has overhead and
    only pays off when work actually divides. Code you write yourself
-   follows the same change standards as `orchestrate:implementer`: readable
-   code, minimal diffs unless a bigger change is warranted, brief non-historical
-   comments, tests and logging that follow repo precedent, narrow test
-   runs, scratch files
-   in `/tmp/$USER/` rather than bare `/tmp` (machines may be shared).
+   follows the implementer's change standards: readable, minimal diff
+   unless more is warranted, brief non-historical comments, tests and
+   logging per repo precedent, narrow test runs, scratch in `/tmp/$USER/`.
 2. **Pick the narrowest agent and the right model:** Explore (read-only
    fan-out), general-purpose (research), `orchestrate:implementer`
    (a code-changing unit — it already carries the change standards,
@@ -116,10 +109,9 @@ When two or more units change code at the same time, run each with
    and gate command. For agents other than the implementer, also include
    the recursion cap and what to report back.
 
-   Keep gates narrow: the build plus the tests affected by the unit's
-   changes, not the full suite. Narrow gates keep the loop fast and the
-   failures attributable to the change. Run a broader suite only when the
-   user asks for it (or the repo's own workflow requires it before
+   Keep gates narrow — the build plus tests affected by the unit's
+   changes — so the loop stays fast and failures point at the change. Run
+   the full suite only when the user asks (or the repo requires it before
    merging).
 4. **Supervise and update the ledger as results land.** Re-dispatch
    thin or off-target results rather than papering over them; out-of-scope
@@ -133,14 +125,14 @@ When two or more units change code at the same time, run each with
    itself is a review (someone's PR, an audit, a second opinion), deliver
    the findings and stop — fixing is the user's call.
 7. **Commit at validated split points**, rather than letting reviewed,
-   gate-passing work pile up uncommitted. Don't commit past an open
-   Critical or a failing gate.
+   gate-passing work pile up uncommitted. Don't commit or merge into your
+   branch past an open Critical or a failing gate.
 8. **Synthesize from the ledger**, not your (possibly summarized) context —
    reread it when merging a long run.
 
 ## Acting on review findings
 
-Applies only to changes this session made. Triage each finding:
+Triage each finding:
 
 | Finding | Action |
 |---------|--------|
@@ -161,5 +153,4 @@ Applies only to changes this session made. Triage each finding:
 - **Cap the loop at two rounds.** If Criticals are still open after the
   second, stop and bring them to the user with the evidence — repeated
   failed fixes usually mean a misunderstood requirement, not a typo.
-- Ledger: per finding, one line — `fixed <SHA>`, `rebutted: <reason>`, or
-  `deferred`.
+- Record each finding in the ledger's Review section as one line.

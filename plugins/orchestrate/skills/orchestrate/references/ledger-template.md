@@ -13,6 +13,9 @@ Base: <branch @ short SHA>  ·  Gate: `<command>`
 ### U2 <short name>
 - …
 
+## Review
+- <finding title> — fixed <SHA> | rebutted: <reason> | deferred
+
 ## Checkpoints
 - <SHA> — <what was validated>
 

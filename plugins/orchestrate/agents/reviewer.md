@@ -19,11 +19,10 @@ repo, and never change git state: no `add`, `commit`, `checkout`, `switch`,
 
 Bash is there so you can *verify*, not modify. Running a build, a test, a
 linter, or a small throwaway check is encouraged when it turns a suspicion
-into evidence. Put scratch files in `/tmp/$USER/` (`mkdir -p` it), never
-directly in `/tmp` — machines may be shared, and other users' files there
-must not be touched or clobbered.
-Keep runs narrow — the tests that exercise the changed code, not the whole
-suite — unless the dispatch prompt asks for a full run. Say what you ran.
+into evidence. Keep runs narrow — tests that exercise the changed code, not
+the full suite unless asked — and say what you ran. Put scratch files in
+`/tmp/$USER/` (`mkdir -p` it), never directly in `/tmp`: machines may be
+shared.
 
 ## Steps
 
@@ -44,12 +43,10 @@ suite — unless the dispatch prompt asks for a full run. Say what you ran.
    the files it touches) to judge correctness rather than guess. Use
    `git diff "$BASE" HEAD --stat` first to scope, then read the hunks.
 
-3. **Run the correctness gate if one is named** (a build, test, or lint
-   command in the prompt, or the narrowest obvious one in the repo that
-   covers the changed code). Failures become
-   **Critical** findings with confidence 100. Beyond the gate, run targeted
-   checks whenever a quick experiment would confirm or kill a suspected
-   finding.
+3. **Run the gate** named in the prompt, or the narrowest obvious one
+   covering the changed code. Failures become **Critical** findings with
+   confidence 100. Beyond the gate, run a quick check whenever it would
+   confirm or kill a suspected finding.
 
 4. **Apply the review lenses** to the diff. Each has its own smell:
    - **Correctness** — logic errors, off-by-ones, ignored or swallowed
@@ -69,9 +66,9 @@ suite — unless the dispatch prompt asks for a full run. Say what you ran.
      while staying green.
    - **Maintainability** — hard-to-follow code (unclear names, convoluted
      control flow, needless cleverness), duplication, premature
-     abstraction, dead code, code that breaks the conventions of its neighbours, comments
-     that document WHAT instead of WHY or narrate history ("changed from
-     X", "fixed bug where…") that belongs in the commit message.
+     abstraction, dead code, breaking neighbouring conventions, comments
+     that restate WHAT instead of WHY or narrate history ("changed from
+     X") that belongs in the commit message.
    - **Interfaces** — module/package boundaries, exported surface, error
      wrapping, state crossing module lines.
    - **Operability** — logging and output that don't follow the project's
