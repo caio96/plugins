@@ -78,24 +78,30 @@ Known limits — check them, don't fight them:
 When two or more units change code at the same time, run each with
 `isolation: "worktree"` so they can't trample each other's working tree.
 
-- **Split by files.** Give parallel units disjoint file sets; overlapping
-  edits turn into merge conflicts you resolve by hand. If units must touch
-  the same file, run them sequentially instead.
-- **Dispatch `orchestrate:implementer`** — it commits on the worktree
-  branch and reports branch + SHA. Any other agent type must be told to
-  commit too: an uncommitted worktree is auto-cleaned and the work lost.
-- **Review before merging.** Point the reviewer at the unit's branch
-  (`review <branch> against <base>`).
-- **Merge into your branch** with `git merge` or `git cherry-pick`, one
-  unit at a time, running the gate after each. Then remove the worktree
-  and delete its branch (`git worktree remove`, `git branch -d`).
+- **Start from existing work**, not a stale base (worktrees branch from
+  `origin/<default>` and miss unpushed commits): merged locally → the new
+  local base; merged on the remote → the latest remote base; continuing a
+  remote PR → its stack (`gh stack checkout <PR>`).
+- **Split by files.** Give parallel units disjoint file sets and an
+  explicit out-of-scope boundary each; overlapping edits become conflicts
+  you resolve by hand. If units must share a file, run them sequentially.
+- **Stacked PRs (`gh stack`)** suit units that build on each other. Agents
+  can start or continue a stack locally (`gh stack init`, `add`, `checkout
+  <PR>`) and stack new branches from their worktrees. Posting PRs
+  (`push`, `submit`) always needs the user's authorization first. Run
+  history-rewriting commands (`rebase`, `sync`, `modify`) one agent at a
+  time.
+- **Notes.** A worktree agent may be unable to write your main checkout's
+  `.notes/`; have it write to its own worktree's `.notes/frictions.md` and
+  fold that into the shared file before removing the worktree.
 
 ## Steps
 
 1. **Decompose and record.** Independent units run in parallel; a unit
    needing another's output is a later stage, not a sibling. If the work
    is small and sequential, just do it — orchestration has overhead and
-   only pays off when work actually divides. Code you write yourself
+   only pays off when work actually divides. Investigate an uncertain
+   unit with a read-only agent first. Code you write yourself
    follows the implementer's change standards: readable, minimal diff
    unless more is warranted, brief non-historical comments, tests and
    logging per repo precedent, narrow test runs, scratch in `/tmp/$USER/`.
@@ -107,7 +113,8 @@ When two or more units change code at the same time, run each with
 3. **Dispatch self-contained prompts.** A subagent sees only what you give
    it — state the goal, the context it needs to judge the work, the base
    and gate command. For agents other than the implementer, also include
-   the recursion cap and what to report back.
+   the recursion cap, the rule to commit before finishing (an uncommitted
+   worktree is auto-cleaned and the work lost), and what to report back.
 
    Keep gates narrow — the build plus tests affected by the unit's
    changes — so the loop stays fast and failures point at the change. Run
