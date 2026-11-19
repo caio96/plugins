@@ -60,3 +60,7 @@ scripts/check.sh [base]                     # validate manifests + version-bump 
 
 > [!IMPORTANT]
 > Bump `version` in `plugins/<name>/.claude-plugin/plugin.json` on every change. Installed copies only update when the version changes.
+
+## 📄 License
+
+[MIT](LICENSE)
