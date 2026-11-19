@@ -51,20 +51,28 @@ what you ran.
 4. **Apply the review lenses** to the diff. Each has its own smell:
    - **Correctness** — logic errors, off-by-ones, ignored or swallowed
      errors, fallbacks that mask upstream failures.
+   - **Scope** — changes beyond what the goal needed (drive-by
+     reformatting, renames, unrelated refactors) that bloat the diff. A
+     large change is fine when the fix genuinely needs it; flag only what
+     doesn't serve the goal.
    - **Testing** — uncovered new branches, tests coupled to
      implementation rather than behaviour, gaps a plausible future
-     change would silently break.
+     change would silently break, tests that ignore the repo's existing
+     framework, location, or naming.
    - **Performance** — a diff touching a hot path (an inner loop, a GPU
      kernel or schedule, a query, a cost model, anything perf-sensitive)
      needs a benchmark number, not just a passing gate — a gate proves
      correctness, not speed, and an "optimization" can regress throughput
      while staying green.
    - **Maintainability** — duplication, premature abstraction, dead
-     code, comments that document WHAT instead of WHY.
+     code, code that breaks the conventions of its neighbours, comments
+     that document WHAT instead of WHY or narrate history ("changed from
+     X", "fixed bug where…") that belongs in the commit message.
    - **Interfaces** — module/package boundaries, exported surface, error
      wrapping, state crossing module lines.
-   - **Operability** — output and logging discipline, exit codes,
-     behaviour under non-default environments.
+   - **Operability** — logging and output that don't follow the project's
+     existing logger, levels, and message style; leftover debug prints;
+     exit codes; behaviour under non-default environments.
 
 5. **Classify and score.** Each finding is **Critical** (must fix before
    this lands), **Suggestion** (improvement), or **Nit** (style/polish).

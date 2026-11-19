@@ -5,7 +5,7 @@ Personal Claude Code plugin marketplace.
 | Plugin | What it gives you |
 |---|---|
 | `terse` | `terse` output style — cuts filler, keeps code/commands/errors verbatim. Adapted from caveman (full level). |
-| `orchestrate` | `orchestrate` skill (decompose → dispatch subagents → synthesize, per-unit model choice, worktree parallelism) + `orchestrate:reviewer` agent. |
+| `orchestrate` | `orchestrate` skill (decompose → dispatch subagents → synthesize, per-unit model choice, worktree parallelism), `orchestrate:implementer` and `orchestrate:reviewer` agents, `/orchestrate:review [base] [gate]` command. |
 
 ## Install on a new machine
 
@@ -40,7 +40,7 @@ Commit to the project's `.claude/settings.json` so collaborators/machines get pr
 
 ```
 claude --plugin-dir ./plugins/orchestrate     # try a plugin without installing
-claude plugin validate .                       # validate marketplace + plugins
+scripts/check.sh [base]                        # validate + version-bump check (default base: origin/main)
 ```
 
 Bump `version` in the plugin's `.claude-plugin/plugin.json` on every change — installed copies only update when the version changes.

@@ -43,11 +43,14 @@ fails, append `.notes/` to `.git/info/exclude`.
   unit; the harness re-surfaces it after compaction.
 - **Ledger file**, one per orchestrate session — `.notes/ledger-<topic>.md`,
   a distinct name each run (never a shared `run.md`) so sessions don't
-  collide or overwrite each other's history. One block per unit: goal,
-  agent id, model, status, artifact/finding, checkpoint SHA. Informative
-  but brief.
+  collide or overwrite each other's history. Use the shape in
+  `references/ledger-template.md`: one short block per unit (agent/model,
+  status, one-line result). Keep it brief — you reread the ledger to
+  synthesize, so every redundant line costs context later. Update a unit's
+  block in place rather than appending a new entry per status change, and
+  record conclusions, not transcripts or diffs.
 - **Frictions** — a single durable `.notes/frictions.md`, shared across
-  every session (append, don't fork a new file). A recurring pain only
+  every session (append one line per friction; don't fork a new file). A recurring pain only
   becomes fixable once it's visible in one place.
 
 ## Pick the model per unit
@@ -82,9 +85,10 @@ When two or more units change code at the same time, run each with
 - **Split by files.** Give parallel units disjoint file sets; overlapping
   edits turn into merge conflicts you resolve by hand. If units must touch
   the same file, run them sequentially instead.
-- **Tell each agent to commit** its finished work on its worktree branch
-  and report back the branch name and commit SHA. An uncommitted worktree
-  is auto-cleaned and the work is lost.
+- **Dispatch `orchestrate:implementer`** — it commits its finished work on
+  the worktree branch and reports the branch and SHA. (If you use another
+  agent type, tell it to do the same: an uncommitted worktree is
+  auto-cleaned and the work is lost.)
 - **Review before merging.** Point the reviewer at the unit's branch
   (`review <branch> against <base>`).
 - **Merge into your branch** with `git merge` or `git cherry-pick`, one
@@ -96,13 +100,19 @@ When two or more units change code at the same time, run each with
 1. **Decompose and record.** Independent units run in parallel; a unit
    needing another's output is a later stage, not a sibling. If the work
    is small and sequential, just do it — orchestration has overhead and
-   only pays off when work actually divides.
+   only pays off when work actually divides. Code you write yourself
+   follows the same change standards as `orchestrate:implementer`: minimal
+   diffs unless a bigger change is warranted, brief non-historical
+   comments, tests and logging that follow repo precedent.
 2. **Pick the narrowest agent and the right model:** Explore (read-only
-   fan-out), general-purpose (research or a self-contained implementation
-   slice), `orchestrate:reviewer` (independent diff review, step 5).
+   fan-out), general-purpose (research), `orchestrate:implementer`
+   (a code-changing unit — it already carries the change standards,
+   recursion cap, commit rule, and report format), `orchestrate:reviewer`
+   (independent diff review, step 5).
 3. **Dispatch self-contained prompts.** A subagent sees only what you give
-   it — state the goal, the context it needs to judge the work, the
-   recursion cap, and what to report back.
+   it — state the goal, the context it needs to judge the work, the base
+   and gate command. For agents other than the implementer, also include
+   the recursion cap and what to report back.
 4. **Supervise and update the ledger as results land.** Re-dispatch
    thin or off-target results rather than papering over them; out-of-scope
    discoveries become ledger notes, not silent expansions.
