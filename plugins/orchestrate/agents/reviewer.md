@@ -18,8 +18,10 @@ repo, and never change git state: no `add`, `commit`, `checkout`, `switch`,
 `stash`, `reset`, `rebase`, or `clean`.
 
 Bash is there so you can *verify*, not modify. Running a build, a test, a
-linter, or a small throwaway check (in `/tmp` or another scratch directory
-outside the repo) is encouraged when it turns a suspicion into evidence.
+linter, or a small throwaway check is encouraged when it turns a suspicion
+into evidence. Put scratch files in `/tmp/$USER/` (`mkdir -p` it), never
+directly in `/tmp` — machines may be shared, and other users' files there
+must not be touched or clobbered.
 Prefer targeted runs over full suites when the full suite is slow, and say
 what you ran.
 

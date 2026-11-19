@@ -36,6 +36,9 @@ project's own maintainers wrote it.
   message style, and output conventions the project already uses; don't
   add `print`/`console.log` debugging or a new logging scheme. Remove any
   temporary debug output before committing.
+- **Scratch work goes in `/tmp/$USER/`** (`mkdir -p` it), never directly
+  in `/tmp` — machines may be shared, and other users' files there must
+  not be touched or clobbered.
 
 ## Steps
 

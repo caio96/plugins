@@ -103,7 +103,8 @@ When two or more units change code at the same time, run each with
    only pays off when work actually divides. Code you write yourself
    follows the same change standards as `orchestrate:implementer`: minimal
    diffs unless a bigger change is warranted, brief non-historical
-   comments, tests and logging that follow repo precedent.
+   comments, tests and logging that follow repo precedent, scratch files
+   in `/tmp/$USER/` rather than bare `/tmp` (machines may be shared).
 2. **Pick the narrowest agent and the right model:** Explore (read-only
    fan-out), general-purpose (research), `orchestrate:implementer`
    (a code-changing unit — it already carries the change standards,
