@@ -1,0 +1,7 @@
+{
+  "enabledPlugins": {
+    "plugin-dev@claude-plugins-official": true,
+    "skill-creator@anthropic-plugin-directory": true,
+    "claude-md-management@anthropic-plugin-directory": true
+  }
+}

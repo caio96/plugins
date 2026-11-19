@@ -1,0 +1,22 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "csalvado-plugins",
+  "description": "Personal Claude Code plugins: terse output style, orchestration playbook, independent reviewer.",
+  "owner": {
+    "name": "Caio Salvador Rohwedder"
+  },
+  "plugins": [
+    {
+      "name": "terse",
+      "description": "Terse output style: cut filler, keep technical substance exact.",
+      "source": "./plugins/terse",
+      "category": "productivity"
+    },
+    {
+      "name": "orchestrate",
+      "description": "Orchestrator playbook (decompose, dispatch subagents, synthesize) plus an independent read-mostly reviewer agent.",
+      "source": "./plugins/orchestrate",
+      "category": "development"
+    }
+  ]
+}

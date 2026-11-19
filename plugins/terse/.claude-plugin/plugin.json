@@ -1,0 +1,7 @@
+{
+  "name": "terse",
+  "version": "0.1.0",
+  "description": "Terse output style: cut filler, keep technical substance exact. Adapted from caveman (full level).",
+  "author": { "name": "Caio Salvador Rohwedder" },
+  "keywords": ["output-style", "tokens", "brevity"]
+}

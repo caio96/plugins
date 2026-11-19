@@ -1,0 +1,7 @@
+{
+  "name": "orchestrate",
+  "version": "0.1.0",
+  "description": "Run a session as an orchestrator: decompose work, dispatch subagents (optionally in isolated worktrees), review with an independent reviewer agent, and synthesize.",
+  "author": { "name": "Caio Salvador Rohwedder" },
+  "keywords": ["orchestration", "subagents", "worktrees", "code-review"]
+}
