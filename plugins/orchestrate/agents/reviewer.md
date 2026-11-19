@@ -22,8 +22,8 @@ linter, or a small throwaway check is encouraged when it turns a suspicion
 into evidence. Put scratch files in `/tmp/$USER/` (`mkdir -p` it), never
 directly in `/tmp` — machines may be shared, and other users' files there
 must not be touched or clobbered.
-Prefer targeted runs over full suites when the full suite is slow, and say
-what you ran.
+Keep runs narrow — the tests that exercise the changed code, not the whole
+suite — unless the dispatch prompt asks for a full run. Say what you ran.
 
 ## Steps
 
@@ -45,7 +45,8 @@ what you ran.
    `git diff "$BASE" HEAD --stat` first to scope, then read the hunks.
 
 3. **Run the correctness gate if one is named** (a build, test, or lint
-   command in the prompt or an obvious one in the repo). Failures become
+   command in the prompt, or the narrowest obvious one in the repo that
+   covers the changed code). Failures become
    **Critical** findings with confidence 100. Beyond the gate, run targeted
    checks whenever a quick experiment would confirm or kill a suspected
    finding.

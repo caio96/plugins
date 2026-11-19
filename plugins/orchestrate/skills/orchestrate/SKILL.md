@@ -103,7 +103,8 @@ When two or more units change code at the same time, run each with
    only pays off when work actually divides. Code you write yourself
    follows the same change standards as `orchestrate:implementer`: minimal
    diffs unless a bigger change is warranted, brief non-historical
-   comments, tests and logging that follow repo precedent, scratch files
+   comments, tests and logging that follow repo precedent, narrow test
+   runs, scratch files
    in `/tmp/$USER/` rather than bare `/tmp` (machines may be shared).
 2. **Pick the narrowest agent and the right model:** Explore (read-only
    fan-out), general-purpose (research), `orchestrate:implementer`
@@ -114,6 +115,12 @@ When two or more units change code at the same time, run each with
    it — state the goal, the context it needs to judge the work, the base
    and gate command. For agents other than the implementer, also include
    the recursion cap and what to report back.
+
+   Keep gates narrow: the build plus the tests affected by the unit's
+   changes, not the full suite. Narrow gates keep the loop fast and the
+   failures attributable to the change. Run a broader suite only when the
+   user asks for it (or the repo's own workflow requires it before
+   merging).
 4. **Supervise and update the ledger as results land.** Re-dispatch
    thin or off-target results rather than papering over them; out-of-scope
    discoveries become ledger notes, not silent expansions.

@@ -46,8 +46,10 @@ project's own maintainers wrote it.
    the blast radius of the change.
 2. Implement the change under the standards above.
 3. Run the gate named in your prompt (build, tests, lint). If none was
-   named, run the closest obvious one for the files you touched. Fix
-   failures you caused; report ones that pre-existed.
+   named, run the narrowest one that covers your change: the build plus
+   the tests for the code you touched and its direct callers, not the
+   whole suite. Full-suite runs are slow and the user asks for them when
+   they're needed. Fix failures you caused; report ones that pre-existed.
 4. Commit on your current branch with a clear message in the repo's commit
    style. If you're in a worktree, an uncommitted change is lost when the
    worktree is cleaned up — always commit finished work.
