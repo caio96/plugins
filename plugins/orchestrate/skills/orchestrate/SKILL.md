@@ -155,11 +155,3 @@ Applies only to changes this session made. Triage each finding:
   failed fixes usually mean a misunderstood requirement, not a typo.
 - Ledger: per finding, one line — `fixed <SHA>`, `rebutted: <reason>`, or
   `deferred`.
-
-## Report (only when the user says the session is over)
-
-- Where the ledger(s) live
-- The synthesized result
-- Review outcome if step 5 ran (tally; fixed / rebutted / open)
-- Validated checkpoints committed (SHAs)
-- Anything left open or flagged for follow-up
