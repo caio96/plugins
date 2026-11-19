@@ -19,7 +19,7 @@ Cuts filler and keeps technical substance exact. Fragments are fine, while code,
 
 ## 🚀 Install
 
-On a new machine (private repo, so this needs GitHub access via SSH or `gh auth`):
+On any machine (the repo is public, so no GitHub credentials are needed):
 
 ```text
 /plugin marketplace add caio96/plugins
