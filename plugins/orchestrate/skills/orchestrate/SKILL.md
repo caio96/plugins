@@ -101,8 +101,8 @@ When two or more units change code at the same time, run each with
    needing another's output is a later stage, not a sibling. If the work
    is small and sequential, just do it — orchestration has overhead and
    only pays off when work actually divides. Code you write yourself
-   follows the same change standards as `orchestrate:implementer`: minimal
-   diffs unless a bigger change is warranted, brief non-historical
+   follows the same change standards as `orchestrate:implementer`: readable
+   code, minimal diffs unless a bigger change is warranted, brief non-historical
    comments, tests and logging that follow repo precedent, narrow test
    runs, scratch files
    in `/tmp/$USER/` rather than bare `/tmp` (machines may be shared).

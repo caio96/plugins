@@ -67,8 +67,9 @@ suite — unless the dispatch prompt asks for a full run. Say what you ran.
      needs a benchmark number, not just a passing gate — a gate proves
      correctness, not speed, and an "optimization" can regress throughput
      while staying green.
-   - **Maintainability** — duplication, premature abstraction, dead
-     code, code that breaks the conventions of its neighbours, comments
+   - **Maintainability** — hard-to-follow code (unclear names, convoluted
+     control flow, needless cleverness), duplication, premature
+     abstraction, dead code, code that breaks the conventions of its neighbours, comments
      that document WHAT instead of WHY or narrate history ("changed from
      X", "fixed bug where…") that belongs in the commit message.
    - **Interfaces** — module/package boundaries, exported surface, error
